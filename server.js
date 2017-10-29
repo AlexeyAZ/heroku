@@ -8,7 +8,7 @@ const cors = require('cors');
 const events = require('events');
 const index = require('./app/routes/index.js');
 
-// events.EventEmitter.defaultMaxListeners = Infinity;
+events.EventEmitter.defaultMaxListeners = Infinity;
 
 const app = express();
 
