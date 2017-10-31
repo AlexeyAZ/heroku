@@ -36,7 +36,8 @@ app.use('/upload', express.static(path.join(__dirname, 'upload')));
 
 app.use(formidable());
 
-app.set('port', (process.env.PORT || 8001));
+var port = process.env.PORT || 8001;
+// app.set('port', (process.env.PORT || 8001));
 
 MongoClient.connect(db.url, (err, database) => {
 
@@ -46,7 +47,7 @@ MongoClient.connect(db.url, (err, database) => {
 
 	index(app, database);
 
-	app.listen(process.env.PORT || 8001, function() {
-		console.log('We are live on ' + this.address().port);
+	app.listen(port, () => {
+		console.log('We are live on ' + port);
 	});
 });
