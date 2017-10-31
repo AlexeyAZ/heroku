@@ -46,7 +46,7 @@ MongoClient.connect(db.url, (err, database) => {
 
 	index(app, database);
 
-	app.listen(app.get('port'), () => {
-		console.log('We are live on ' + app.get('port'));
+	app.listen(process.env.PORT || 8001, function() {
+		console.log('We are live on ' + this.address().port);
 	});
 });
