@@ -1,6 +1,13 @@
 module.exports = function(app, db) {
 	const ObjectID = require('mongodb').ObjectID;
 	const fs = require('fs');
+	const cloudinary = require('cloudinary');
+
+	cloudinary.config({
+		cloud_name: 'dkojl4oh9',
+		api_key: '626335577984612',
+		api_secret: 'FwrK6vXCs4ECvqM6SM9RHYzOgc0'
+	});
 
 	function uploadSite(req, res) {
 		/** request **
@@ -16,16 +23,28 @@ module.exports = function(app, db) {
 			name: req.fields.name,
 			link: req.fields.link,
 			git: req.fields.git,
-			descr: req.fields.descr,
-			img: req.files.image.path
+			descr: req.fields.descr
 		};
 
-		db.collection('sites').insert(site, (err, result) => {
+		function addSiteToDb(database, siteObj, uploadResult) {
+			site.img = uploadResult.secure_url;
+			site.imgId = uploadResult.public_id;
 
-			if (err) { 
-				res.send({ 'error': 'An error has occurred' });
+			database.collection('sites').insert(siteObj, (err, result) => {
+
+				if (err) { 
+					res.send({ 'message': 'error' });
+				} else {
+					res.send({ 'message': 'success', 'res': result});
+				}
+			});
+		}
+
+		cloudinary.v2.uploader.upload(req.files.image.path, (err, result) => {
+			if (err) {
+				res.send('error');
 			} else {
-				res.send(result);
+				addSiteToDb(db, site, result);
 			}
 		});
 	}
@@ -44,9 +63,17 @@ module.exports = function(app, db) {
 					if (err) {
 						res.send({ 'error': 'An error has occurred' });
 					} else {
-						fs.unlink(__dirname.slice(0, -10) + site.img, () => {
-							res.send('success');
+						cloudinary.v2.uploader.destroy(site.imgId, (error, result) => {
+							if (err) {
+								res.send('error');
+							} else {
+								res.send('success');
+							}
 						});
+
+						// fs.unlink(__dirname.slice(0, -10) + site.img, () => {
+						// 	res.send('success');
+						// });
 					}
 				});
 			}

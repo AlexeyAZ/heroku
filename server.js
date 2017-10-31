@@ -6,6 +6,7 @@ const db = require('./config/db');
 const path = require('path');
 const cors = require('cors');
 const events = require('events');
+
 const index = require('./app/routes/index.js');
 
 events.EventEmitter.defaultMaxListeners = Infinity;
@@ -33,10 +34,7 @@ app.use(function (req, res, next) {
 
 app.use('/upload', express.static(path.join(__dirname, 'upload')));
 
-app.use(formidable({
-	uploadDir: 'upload/',
-	keepExtensions: true
-}));
+app.use(formidable());
 
 app.set('port', (process.env.PORT || 8001));
 
