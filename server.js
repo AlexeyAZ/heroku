@@ -12,6 +12,8 @@ const index = require('./app/routes/index.js');
 events.EventEmitter.defaultMaxListeners = Infinity;
 
 const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(function (req, res, next) {
 
@@ -37,7 +39,6 @@ app.use('/upload', express.static(path.join(__dirname, 'upload')));
 app.use(formidable());
 
 var port = process.env.PORT || 8001;
-// app.set('port', (process.env.PORT || 8001));
 
 MongoClient.connect(db.url, (err, database) => {
 

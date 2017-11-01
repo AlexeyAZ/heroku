@@ -34,6 +34,7 @@ module.exports = function(app, db) {
 
 				if (err) { 
 					res.send({ 'message': 'error' });
+					
 				} else {
 					res.send({ 'message': 'success', 'res': result});
 				}
@@ -42,7 +43,7 @@ module.exports = function(app, db) {
 
 		cloudinary.v2.uploader.upload(req.files.image.path, (err, result) => {
 			if (err) {
-				res.send('error');
+				res.send({ 'message': 'error' });
 			} else {
 				addSiteToDb(db, site, result);
 			}
@@ -81,6 +82,19 @@ module.exports = function(app, db) {
 	}
 
 
+	function changeField(req, res) {
+		// const id = req.params.id;
+		// const field = req.params.field;
+		// const siteObj = { _id: new ObjectID(id) };
+		console.log(req.body);
+
+		return res.send(req.body);
+		// db.collection('sites').findOne(siteObj, (err, site) => {
+
+		// });
+	}
+
+
 	function showSiteList(req, res) {
 		db.collection('sites').find().toArray((err, item) => {
 			if (err) {
@@ -102,4 +116,5 @@ module.exports = function(app, db) {
 	app.post('/upload/', uploadSite);
 	app.get('/sites/:id', deleteSite);
 	app.get('/sites/', showSiteList);
+	app.post('/sites/', changeField);
 };
