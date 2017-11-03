@@ -86,9 +86,9 @@ module.exports = function(app, db) {
 		// const id = req.params.id;
 		// const field = req.params.field;
 		// const siteObj = { _id: new ObjectID(id) };
-		console.log(req.body);
+		//console.log(req.body);
 
-		return res.send(req.body);
+		res.json(req.body);
 		// db.collection('sites').findOne(siteObj, (err, site) => {
 
 		// });
@@ -113,8 +113,8 @@ module.exports = function(app, db) {
 	}
 
 
+	app.post('/sites/', changeField);
 	app.post('/upload/', uploadSite);
 	app.get('/sites/:id', deleteSite);
 	app.get('/sites/', showSiteList);
-	app.post('/sites/', changeField);
 };

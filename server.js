@@ -6,14 +6,14 @@ const db = require('./config/db');
 const path = require('path');
 const cors = require('cors');
 const events = require('events');
+const logger = require('express-logger');
+const methodOverride = require('method-override');
 
 const index = require('./app/routes/index.js');
 
 events.EventEmitter.defaultMaxListeners = Infinity;
 
 const app = express();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(function (req, res, next) {
 
@@ -35,6 +35,12 @@ app.use(function (req, res, next) {
 });
 
 app.use('/upload', express.static(path.join(__dirname, 'upload')));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(methodOverride());
+
+
 
 app.use(formidable());
 
